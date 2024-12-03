@@ -1,48 +1,48 @@
 import 'package:flutter/material.dart';
-import '../models/client_model.dart';
-import '../services/client_service.dart';
+import '../models/provider_model.dart';
+import '../services/provider_service.dart';
 
-class Release_Client extends StatefulWidget {
-  final ClientModel? client;
-  final int? clientIndex;
+class Release_Provider extends StatefulWidget {
+  final ProviderModel? provider;
+  final int? providerIndex;
 
-  const Release_Client({
+  const Release_Provider({
     super.key,
-    this.client,
-    this.clientIndex,
+    this.provider,
+    this.providerIndex,
   });
 
   @override
-  _ReleaseClientState createState() => _ReleaseClientState();
+  _ReleaseProviderState createState() => _ReleaseProviderState();
 }
 
-class _ReleaseClientState extends State<Release_Client> {
+class _ReleaseProviderState extends State<Release_Provider> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _representativeController = TextEditingController();
   final TextEditingController _rfcController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final ClientService _clientService = ClientService();
+  final ProviderService _providerService = ProviderService();
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _initializeService();
-    if (widget.client != null) {
-      _nameController.text = widget.client!.nombre ?? '';
-      _representativeController.text = widget.client!.representante ?? '';
-      _rfcController.text = widget.client!.rfc ?? '';
-      _addressController.text = widget.client!.direccion ?? '';
-      _phoneController.text = widget.client!.telefono ?? '';
-      _emailController.text = widget.client!.correoElectronico ?? '';
+    if (widget.provider != null) {
+      _nameController.text = widget.provider!.nombre ?? '';
+      _representativeController.text = widget.provider!.representante ?? '';
+      _rfcController.text = widget.provider!.rfc ?? '';
+      _addressController.text = widget.provider!.direccion ?? '';
+      _phoneController.text = widget.provider!.telefono ?? '';
+      _emailController.text = widget.provider!.correoElectronico ?? '';
     }
   }
 
   Future<void> _initializeService() async {
     try {
-      await _clientService.init();
+      await _providerService.init();
     } catch (e) {
       print('Error inicializando servicio: $e');
     }
@@ -74,7 +74,7 @@ class _ReleaseClientState extends State<Release_Client> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           Text(
-            widget.client == null ? 'Registro de Clientes' : 'Editar Cliente',
+            widget.provider == null ? 'Registro de Proveedores' : 'Editar Proveedor',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -100,7 +100,7 @@ class _ReleaseClientState extends State<Release_Client> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                buildTextField(_nameController, 'Nombre del Cliente'),
+                buildTextField(_nameController, 'Nombre del Proveedor'),
                 buildTextField(_representativeController, 'Representante'),
                 buildTextField(_rfcController, 'RFC'),
                 buildTextField(_addressController, 'Dirección'),
@@ -120,7 +120,7 @@ class _ReleaseClientState extends State<Release_Client> {
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                     ),
                     child: Text(
-                      widget.client == null ? 'Agregar' : 'Guardar Cambios',
+                      widget.provider == null ? 'Agregar' : 'Guardar Cambios',
                       style: const TextStyle(
                         color: Color(0xFF2F2740),
                         fontWeight: FontWeight.bold
@@ -164,7 +164,7 @@ class _ReleaseClientState extends State<Release_Client> {
     });
 
     try {
-      final clientData = ClientModel(
+      final providerData = ProviderModel(
         nombre: _nameController.text,
         correoElectronico: _emailController.text,
         representante: _representativeController.text,
@@ -174,18 +174,18 @@ class _ReleaseClientState extends State<Release_Client> {
         isActive: true,
       );
 
-      if (widget.client == null) {
-        await _clientService.addClient(clientData);
+      if (widget.provider == null) {
+        await _providerService.addProvider(providerData);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cliente agregado exitosamente')),
+          const SnackBar(content: Text('Proveedor agregado exitosamente')),
         );
         _clearForm();
-      } else if (widget.clientIndex != null) {
-        await _clientService.updateClient(widget.clientIndex!, clientData);
+      } else if (widget.providerIndex != null) {
+        await _providerService.updateProvider(widget.providerIndex!, providerData);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cliente actualizado exitosamente')),
+          const SnackBar(content: Text('Proveedor actualizado exitosamente')),
         );
         Navigator.pop(context, true);
       }

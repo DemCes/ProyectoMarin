@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/see_C.dart';
-import 'package:flutter_application_1/release_Client.dart';
-import 'package:flutter_application_1/disable_Client.dart';
-import '../services/client_service.dart';
-import '../models/client_model.dart';
+import 'package:flutter_application_1/see_P.dart';
+import 'package:flutter_application_1/release_Provider.dart';
+import 'package:flutter_application_1/disable_Provider.dart';
+import '../services/provider_service.dart';
+import '../models/provider_model.dart';
 
-class SeeClient extends StatefulWidget {
-  const SeeClient({super.key});
+class SeeProvider extends StatefulWidget {
+  const SeeProvider({super.key});
 
   @override
-  State<SeeClient> createState() => _SeeClientState();
+  State<SeeProvider> createState() => _SeeProviderState();
 }
 
-class _SeeClientState extends State<SeeClient> with SingleTickerProviderStateMixin {
+class _SeeProviderState extends State<SeeProvider> with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   String _searchText = '';
   late TabController _tabController;
 
   // Ya no necesitamos estas listas porque Hive maneja el almacenamiento
-  // List<Map<String, String>> clients = [];
-  // List<Map<String, String>> disabledClients = [];
+  // List<Map<String, String>> providers = [];
+  // List<Map<String, String>> disabledProviders = [];
 
   // Inicializar el servicio de Hive
-  final ClientService _clientService = ClientService();
+  final ProviderService _providerService = ProviderService();
 
   @override
   void initState() {
@@ -32,14 +32,14 @@ class _SeeClientState extends State<SeeClient> with SingleTickerProviderStateMix
   }
 
   Future<void> _initializeService() async {
-    await _clientService.init();
+    await _providerService.init();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
-    //_clientService.close();
+    //_providerService.close();
     super.dispose();
   }
 
@@ -72,7 +72,7 @@ class _SeeClientState extends State<SeeClient> with SingleTickerProviderStateMix
             },
           ),
           const Text(
-            'Clientes',
+            'Proveedores',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -93,26 +93,26 @@ class _SeeClientState extends State<SeeClient> with SingleTickerProviderStateMix
       labelColor: Colors.white,
       unselectedLabelColor: Colors.white54,
       tabs: const [
-        Tab(text: "Clientes"),
-        Tab(text: 'Crear Clientes'),
-        Tab(text: 'Clientes Inhabilitados'),
+        Tab(text: "Proveedores"),
+        Tab(text: 'Crear Proveedor'),
+        Tab(text: 'Proveedores Inhabilitados'),
       ],
     );
   }
 
   Widget buildTabContent() {
-  return TabBarView(
-    controller: _tabController,
-    children: [
-      SeeC(key: UniqueKey()),  // Agrega keys únicas
-      Release_Client(key: UniqueKey()),
-      DisableClient(key: UniqueKey()),
-    ],
-  );
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        SeeP(key: UniqueKey()),
+        Release_Provider(key: UniqueKey()),
+        DisableProvider(key: UniqueKey()),
+      ],
+    );
+  }
 
   // Ya no necesitamos estos métodos porque Hive maneja el almacenamiento directamente
-  // void addClient(Map<String, String> clientData) { ... }
-  // void disableClient(Map<String, String> client) { ... }
-  // void restoreClient(Map<String, String> client) { ... }
-}
+  // void addProvider(Map<String, String> providerData) { ... }
+  // void disableProvider(Map<String, String> provider) { ... }
+  // void restoreProvider(Map<String, String> provider) { ... }
 }

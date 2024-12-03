@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import '../services/client_service.dart';
-import '../models/client_model.dart';
+import '../services/provider_service.dart';
+import '../models/provider_model.dart';
 
-class DisableClient extends StatefulWidget {
-  const DisableClient({super.key});
+class DisableProvider extends StatefulWidget {
+  const DisableProvider({super.key});
 
   @override
-  State<DisableClient> createState() => _DisableClientState();
+  State<DisableProvider> createState() => _DisableProviderState();
 }
 
-class _DisableClientState extends State<DisableClient> {
+class _DisableProviderState extends State<DisableProvider> {
   final TextEditingController _searchController = TextEditingController();
-  final ClientService _clientService = ClientService();
-  List<ClientModel> _disabledClients = [];
+  final ProviderService _providerService = ProviderService();
+  List<ProviderModel> _disabledProviders = [];
   bool _isLoading = true;
   String _searchText = '';
 
@@ -24,29 +24,29 @@ class _DisableClientState extends State<DisableClient> {
 
   Future<void> _initializeService() async {
     try {
-      await _clientService.init();
-      _loadDisabledClients();
+      await _providerService.init();
+      _loadDisabledProviders();
     } catch (e) {
       print('Error inicializando servicio: $e');
     }
   }
 
-  void _loadDisabledClients() {
+  void _loadDisabledProviders() {
     setState(() {
       _isLoading = true;
     });
     
     try {
-      _disabledClients = _clientService.getDisabledClients();
+      _disabledProviders = _providerService.getDisabledProviders();
       if (_searchText.isNotEmpty) {
-        _disabledClients = _disabledClients
-          .where((client) =>
-            (client.nombre?.toLowerCase() ?? '').contains(_searchText.toLowerCase()) ||
-            (client.correoElectronico?.toLowerCase() ?? '').contains(_searchText.toLowerCase()))
+        _disabledProviders = _disabledProviders
+          .where((provider) =>
+            (provider.nombre?.toLowerCase() ?? '').contains(_searchText.toLowerCase()) ||
+            (provider.correoElectronico?.toLowerCase() ?? '').contains(_searchText.toLowerCase()))
           .toList();
       }
     } catch (e) {
-      print('Error cargando clientes deshabilitados: $e');
+      print('Error cargando proveedores deshabilitados: $e');
     }
 
     setState(() {
@@ -77,7 +77,7 @@ class _DisableClientState extends State<DisableClient> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Clientes Inhabilitados',
+            'Proveedores Inhabilitados',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -89,7 +89,6 @@ class _DisableClientState extends State<DisableClient> {
       ),
     );
   }
-
   Widget buildSearchContainer() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -116,7 +115,7 @@ class _DisableClientState extends State<DisableClient> {
                   onChanged: (text) {
                     setState(() {
                       _searchText = text;
-                      _loadDisabledClients();
+                      _loadDisabledProviders();
                     });
                   },
                 ),
@@ -142,7 +141,7 @@ class _DisableClientState extends State<DisableClient> {
         ),
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
-            : _disabledClients.isEmpty
+            : _disabledProviders.isEmpty
                 ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -150,16 +149,16 @@ class _DisableClientState extends State<DisableClient> {
                         Icon(Icons.info_outline, color: Colors.white, size: 50),
                         SizedBox(height: 10),
                         Text(
-                          'No hay clientes inhabilitados',
+                          'No hay proveedores inhabilitados',
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
                     ),
                   )
                 : ListView.builder(
-                    itemCount: _disabledClients.length,
+                    itemCount: _disabledProviders.length,
                     itemBuilder: (context, index) {
-                      final client = _disabledClients[index];
+                      final provider = _disabledProviders[index];
                       return Container(
                         margin: const EdgeInsets.all(8.0),
                         padding: const EdgeInsets.all(16.0),
@@ -177,7 +176,7 @@ class _DisableClientState extends State<DisableClient> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    client.nombre ?? 'Nombre no disponible',
+                                    provider.nombre ?? 'Nombre no disponible',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold
@@ -191,19 +190,19 @@ class _DisableClientState extends State<DisableClient> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    'RFC:\n${client.rfc ?? 'No disponible'}',
+                                    'RFC:\n${provider.rfc ?? 'No disponible'}',
                                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                                   ),
                                 ),
                                 Text(
-                                  'Teléfono:\n${client.telefono ?? 'No disponible'}',
+                                  'Teléfono:\n${provider.telefono ?? 'No disponible'}',
                                   style: const TextStyle(fontSize: 14, color: Colors.black87),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Email: ${client.correoElectronico ?? 'No disponible'}',
+                              'Email: ${provider.correoElectronico ?? 'No disponible'}',
                               style: const TextStyle(fontSize: 14, color: Colors.black87),
                             ),
                             const SizedBox(height: 8),
@@ -211,7 +210,7 @@ class _DisableClientState extends State<DisableClient> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    'Dirección: ${client.direccion ?? 'No disponible'}',
+                                    'Dirección: ${provider.direccion ?? 'No disponible'}',
                                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                                   ),
                                 ),
@@ -224,7 +223,7 @@ class _DisableClientState extends State<DisableClient> {
                                         return AlertDialog(
                                           title: const Text("Confirmar Restauración"),
                                           content: Text(
-                                            "¿Estás seguro de que deseas restaurar al cliente ${client.nombre}?",
+                                            "¿Estás seguro de que deseas restaurar al proveedor ${provider.nombre}?",
                                           ),
                                           actions: [
                                             TextButton(
@@ -236,21 +235,21 @@ class _DisableClientState extends State<DisableClient> {
                                             TextButton(
                                               onPressed: () async {
                                                 try {
-                                                  final clientIndex = _clientService.getClientIndex(client);
-                                                  if (clientIndex != null) {
-                                                    await _clientService.restoreClient(clientIndex);
-                                                    _loadDisabledClients();
+                                                  final providerIndex = _providerService.getProviderIndex(provider);
+                                                  if (providerIndex != null) {
+                                                    await _providerService.restoreProvider(providerIndex);
+                                                    _loadDisabledProviders();
                                                     if (!mounted) return;
                                                     Navigator.of(context).pop();
                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                       const SnackBar(
-                                                        content: Text('Cliente restaurado exitosamente'),
+                                                        content: Text('Proveedor restaurado exitosamente'),
                                                         duration: Duration(seconds: 2),
                                                       ),
                                                     );
                                                   }
                                                 } catch (e) {
-                                                  print('Error al restaurar cliente: $e');
+                                                  print('Error al restaurar proveedor: $e');
                                                   ScaffoldMessenger.of(context).showSnackBar(
                                                     SnackBar(content: Text('Error: $e')),
                                                   );

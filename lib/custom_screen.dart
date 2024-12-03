@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/see_Supplier.dart';
+import 'package:flutter_application_1/see_Provider.dart';
 import 'package:flutter_application_1/release_Client.dart';
-import 'package:flutter_application_1/release_Supplier.dart';
+import 'package:flutter_application_1/release_Provider.dart';
 import 'package:flutter_application_1/disable_Client.dart';
-import 'package:flutter_application_1/disable_Supplier.dart';
+import 'package:flutter_application_1/disable_Provider.dart';
 import 'package:flutter_application_1/see_Projects.dart';
 import 'package:flutter_application_1/add_Task.dart';
 import 'package:flutter_application_1/see_Client.dart';
@@ -93,7 +93,7 @@ class _CustomScreenState extends State<CustomScreen> with SingleTickerProviderSt
             if (index == 0) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SeeClient()));
             } else if (index == 1) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SeeSupplier()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SeeProvider()));
             }
             else if (index ==2){
               Navigator.push(context, MaterialPageRoute(builder: (context) =>const SeeProjects()));

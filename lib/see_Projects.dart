@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/see_PJ.dart';
-import 'package:flutter_application_1/see_Supplier.dart';
+import 'package:flutter_application_1/see_Provider.dart';
 import 'package:flutter_application_1/release_Client.dart';
-import 'package:flutter_application_1/release_Supplier.dart';
+import 'package:flutter_application_1/release_Provider.dart';
 import 'package:flutter_application_1/disable_Client.dart';
-import 'package:flutter_application_1/disable_Supplier.dart';
+import 'package:flutter_application_1/disable_Provider.dart';
 import 'package:flutter_application_1/see_Projects.dart';
 import 'package:flutter_application_1/add_Task.dart';
 import 'package:flutter_application_1/release_Project.dart';
